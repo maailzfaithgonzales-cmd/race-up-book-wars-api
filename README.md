@@ -67,13 +67,12 @@ left early has fewer answers, so `completed` is false.
 
 ## Tables
 
-- `game_users`: registered accounts (players and hosts) with role, total EXP and school ID
+- `users`: registered accounts (players and hosts) with role, total EXP and school ID
 - `question_sets`: a named set of questions the host picks for a session
 - `book_effects`: effects that move a player on the shelf
 - `questions`: the questions in a set, with choices and the correct answer
 - `game_sessions`: one game run by a host, with join code, status, and start and end times
-- `players`: one account's seat in one session, with shelf position, final ranking and session
-output
+- `players`: one account's seat in one session, with shelf position, final ranking and session output
 - `player_question_progress`: each player's progress on each question in a session
 - `answers`: every answer a player submitted
 - `retry_pool`: questions a player got wrong and may retry
