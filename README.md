@@ -60,11 +60,25 @@ Base URL: `http://localhost:3001/api/v1`
 
 ## What "completed" means in my game
 
-[One or two sentences: when does a player count as having completed a game? For example: "A player completed the game when they answered every question, even if some answers were wrong or timed out."]
+A player is "completed" when they have answered every question in the game's
+question set. The results query counts the player's rows in `answers` and compares
+the count with the number of questions in the session's question set. A player who
+left early has fewer answers, so `completed` is false.
 
 ## Tables
 
-[List your tables, one line each, in the order of your migrations.]
+- `game_users`: registered accounts (players and hosts) with role, total EXP and school ID
+- `question_sets`: a named set of questions the host picks for a session
+- `book_effects`: effects that move a player on the shelf
+- `questions`: the questions in a set, with choices and the correct answer
+- `game_sessions`: one game run by a host, with join code, status, and start and end times
+- `players`: one account's seat in one session, with shelf position, final ranking and session
+output
+- `player_question_progress`: each player's progress on each question in a session
+- `answers`: every answer a player submitted
+- `retry_pool`: questions a player got wrong and may retry
+- `leaderboard`: the final ranking saved for each player after a session ends
+- `exp_transactions`: EXP the host awarded to players after a session
 
 ## Database scripts
 
