@@ -6,7 +6,10 @@ module.exports = {
   async up(queryInterface) {
     const db = queryInterface.sequelize;
 
+    const [[host]] = await db.query("SELECT user_id FROM users WHERE nickname = 'host_maria'");
+
     await queryInterface.bulkInsert('question_sets', [{
+      host_id: host.user_id,
       title: SET_TITLE,
       description: 'Five easy questions about books and Philippine literature.',
       subject: 'Literature',
