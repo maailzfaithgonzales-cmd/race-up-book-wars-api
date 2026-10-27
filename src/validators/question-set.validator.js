@@ -1,7 +1,6 @@
 
 const { body, param } = require('express-validator');
 
-// Required on create, optional on update
 const title = (required) => {
   const start = required
     ? body('title').exists().withMessage('title is required').bail()

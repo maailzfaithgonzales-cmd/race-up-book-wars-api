@@ -35,7 +35,6 @@ async function get(id, user) {
   return questionSet;
 }
 
-// The caller is the owner. The client never chooses the host_id.
 function create(data, user) {
   return questionSetRepository.create({
     ...data,
@@ -43,13 +42,11 @@ function create(data, user) {
   });
 }
 
-// Only the owner or an admin may update a question set.
 async function update(id, changes, user) {
   const questionSet = await get(id, user);
   return questionSetRepository.update(questionSet, changes);
 }
 
-// Only the owner or an admin may delete a question set.
 async function remove(id, user) {
   const questionSet = await get(id, user);
   await questionSetRepository.remove(questionSet);
