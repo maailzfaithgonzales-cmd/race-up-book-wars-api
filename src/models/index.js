@@ -18,4 +18,9 @@ const sequelize = new Sequelize(
 //   User.hasMany(Player, { foreignKey: 'user_id' });
 //   Player.belongsTo(User, { foreignKey: 'user_id' });
 
-module.exports = { sequelize, Sequelize, DataTypes };
+const User = require('./user')(sequelize, DataTypes);
+const QuestionSet = require('./question-set')(sequelize, DataTypes);
+
+User.hasMany(QuestionSet, { foreignKey: 'host_id' });
+QuestionSet.belongsTo(User, { foreignKey: 'host_id', as: 'host' });
+module.exports = { sequelize, Sequelize, DataTypes, User, QuestionSet };
