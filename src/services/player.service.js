@@ -2,6 +2,7 @@
 const playerRepository = require('../repositories/player.repository');
 const sessionService = require('./session.service');
 const { conflict } = require('../errors/app-error');
+const { constraintOf } = require('../errors/db-errors');
 
 async function join(code, nickname, user) {
   // Question 3: Does a game with this code exist?
@@ -53,13 +54,26 @@ async function join(code, nickname, user) {
   }
 
   // Question 8: The database checks whether the nickname is available.
-  const player = await playerRepository.create({
+  let player;
+try {
+  player = await playerRepository.create({
     session_id: session.session_id,
     user_id: user.user_id,
     nickname,
   });
-
-  return { session, player, created: true };
+} catch (err) {
+  // Two requests from one account arrived together: the loser gets the
+  // winner's seat.
+  if (constraintOf(err) === 'uq_one_seat') {
+    const again = await playerRepository.findSeat(
+      session.session_id,
+      user.user_id
+    );
+    return { session, player: again, created: false };
+  }
+  throw err;
+}
+return { session, player, created: true };
 }
 
 async function list(code) {
