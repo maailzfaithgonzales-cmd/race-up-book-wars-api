@@ -108,7 +108,7 @@
             }
           ],
           "request": {
-            "method": "GET",
+            "method": "POST",
             "header": [
               {
                 "key": "X-Demo-User",
@@ -619,8 +619,993 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "17 - Delete: set used in a game",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0001"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/question-sets/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "question-sets",
+                "1"
+              ]
+            }
+          },
+          "response": []
         }
       ]
+    },
+    {
+      "name": "Module 2 - sessions and players",
+      "item": [
+        {
+          "name": "01 - Create session",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();\r\n\r\npm.collectionVariables.set(\"codeA\", response.code);\r\n\r\nconsole.log(\"Saved codeA:\", pm.collectionVariables.get(\"codeA\"));\r\n\r\npm.test(\"Session code was saved\", function () {\r\n    pm.expect(pm.collectionVariables.get(\"codeA\")).to.match(/^\\d{6}$/);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0001"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"set_id\": {{extraSetId}}\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "02 - Start: wrong role",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0002"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"set_id\": {{extraSetId}}\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "03 - Start: set missing",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0001"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"set_id\": 999999\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "04 - Start: not my set",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0007"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"set_id\": {{extraSetId}}\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "05 - Start: invalid set ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0001"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"set_id\": \"abc\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "06 - Get session",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/sessions/{{codeA}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "{{codeA}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "07 - Get session: invalid code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/sessions/12",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "12"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "08 - Start: wrong host",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0002"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"PLAYING\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions/{{codeA}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "{{codeA}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "10 - Join session",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set(\"cocoId\", pm.response.json().player_id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0006"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nickname\": \"Coco\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions/{{codeA}}/players",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "{{codeA}}",
+                "players"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "11 - Join again: same player",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"same seat as before\", function () {\r\n  pm.expect(pm.response.json().player_id)\r\n    .to.eql(Number(pm.collectionVariables.get(\"cocoId\")));\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0006"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nickname\": \"Coco\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions/{{codeA}}/players",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "{{codeA}}",
+                "players"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "09 - Start session",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0001"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"PLAYING\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions/{{codeA}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "{{codeA}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "12 - Create another session",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set(\"codeB\", pm.response.json().code);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0001"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"set_id\": {{extraSetId}}\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "13 - Join another game: already in game",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0006"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nickname\": \"Coco\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions/{{codeB}}/players",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "{{codeB}}",
+                "players"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "14 - Close the first game",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0001"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"ENDED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions/{{codeA}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "{{codeA}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "15 - Join after the other game ended",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0006"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nickname\": \"Coco\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions/{{codeB}}/players",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "{{codeB}}",
+                "players"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "16 - Join: game ended",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0005"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nickname\": \"Bert\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions/{{codeA}}/players",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "{{codeA}}",
+                "players"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "17 - Start a game with one seat",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set(\"codeC\", pm.response.json().code);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0001"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"set_id\": {{extraSetId}},\r\n  \"max_players\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "18 - Fill the one seat",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0002"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nickname\": \"Mika\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions/{{codeC}}/players",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "{{codeC}}",
+                "players"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "19 - Join: game full",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0004"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nickname\": \"Lani\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions/{{codeC}}/players",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "{{codeC}}",
+                "players"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "20 - Results: show the closed game",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();\r\n\r\npm.test(\"The closed game is listed\", function () {\r\n    pm.expect(response.results).to.be.an(\"array\").that.is.not.empty;\r\n\r\n    const closedGames = response.results.filter(game =>\r\n        game.ended_at !== null\r\n    );\r\n\r\n    pm.expect(closedGames.length).to.be.greaterThan(0);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Hub-Key",
+                "value": "dev-hub-key"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/results",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "results"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "21 - Join: missing identity",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nickname\": \"Ghost\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions/{{codeA}}/players",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "{{codeA}}",
+                "players"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "22 - Join: invalid nickname",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0004"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nickname\": \"a\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions/{{codeA}}/players",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "{{codeA}}",
+                "players"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "23 - Join: session not found",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0004"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nickname\": \"Lani\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions/999999/players",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "999999",
+                "players"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "24 - Join: duplicate nickname",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0004"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nickname\": \"Coco\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions/{{codeA}}/players",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "{{codeA}}",
+                "players"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "25 - Join: another valid player",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0004"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nickname\": \"Lani\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions/{{codeA}}/players",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "{{codeA}}",
+                "players"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "26 - Get session players",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/sessions/{{codeA}}/players",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "{{codeA}}",
+                "players"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "27 - Update session: invalid status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0001"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"BOGUS\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions/{{codeA}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "{{codeA}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "28 - Update session: end before start",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "X-Demo-User",
+                "value": "2099-0001"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"ENDED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sessions/{{codeA}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "{{codeA}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "TEMP - Close leftover session",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-Demo-User",
+            "value": "2099-0001"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"status\": \"ENDED\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/sessions/614098",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "sessions",
+            "614098"
+          ]
+        }
+      },
+      "response": []
     }
   ],
   "variable": [
@@ -634,6 +1619,22 @@
     },
     {
       "key": "extraSetId",
+      "value": ""
+    },
+    {
+      "key": "codeA",
+      "value": ""
+    },
+    {
+      "key": "cocoId",
+      "value": ""
+    },
+    {
+      "key": "codeB",
+      "value": ""
+    },
+    {
+      "key": "codeC",
       "value": ""
     }
   ]
