@@ -48,15 +48,47 @@ npm run dev
 | DB_PASSWORD | (your own) | Database password. Never commit this. |
 | HUB_API_KEY | dev-hub-key | Key the Library Game Hub sends to read results. The library gives the real one at deployment. |
 
+## Request headers and authentication
+
+### X-Demo-User
+
+The `X-Demo-User` header identifies the host or player making a request. During Week 11, this is a temporary identity mechanism that uses seeded school IDs to identify accounts.
+
+Example:
+
+`X-Demo-User: 2099-0001`
+
+This is not real authentication because anyone can enter a seeded school ID. It is used for development and testing until the actual authentication system is implemented in Week 12.
+
+### X-Hub-Key
+
+The `X-Hub-Key` header is used by the Library Game Hub to access the `/results` endpoint.
+
+Example:
+
+`X-Hub-Key: dev-hub-key`
+
+The API checks this key before returning game results. The development key is stored in the `HUB_API_KEY` environment variable. The actual deployment key will be provided by the library.
+
 ## Endpoints (Hub Contract v1.2)
 
 Base URL: `http://localhost:3001/api/v1`
 
-| Method | Path | Purpose | Success |
-|---|---|---|---|
-| GET | /health | Is the API up and can it reach the database? | 200 (503 when the database is down) |
-| GET | /game-info | Slug, name, group, developer, description, player limits, version | 200 |
-| GET | /results | Finished games, every player, and the top 3. Needs the `X-Hub-Key` header. Optional `?since=` | 200 (401 without the key) |
+| Method | Path | Purpose | Who may call it | Success |
+|---|---|---|---|---|
+| GET | /health | Check if the API is running and can reach the database | Anyone | 200 (503 when the database is down) |
+| GET | /game-info | Retrieve game information | Anyone | 200 |
+| GET | /results | Retrieve finished games, every player, and the top 3 | Library Game Hub with a valid X-Hub-Key | 200 |
+| POST | /sessions | Create a new game session | HOST or ADMIN | 201 |
+| GET | /sessions/{code} | Retrieve session details using its join code | No role restriction | 200 |
+| PATCH | /sessions/{code} | Update the session status (start or end the game) | HOST or ADMIN | 200 |
+| POST | /sessions/{code}/players | Join a session or rejoin an existing seat | Any identified user | 201 (new player), 200 (rejoin) |
+| GET | /sessions/{code}/players | Retrieve the players in a session | No role restriction | 200 |
+| GET |	/question-sets | HOST or ADMIN	| 200 |
+| POST | /question-sets	| HOST or ADMIN	| 201 |
+| GET | /question-sets/{id}	| HOST or ADMIN, subject to ownership	| 200 |
+| PATCH	| /question-sets/{id} | HOST or ADMIN, subject to ownership	| 200 |
+| DELETE |/question-sets/{id} | HOST or ADMIN, subject to ownership	| 204 |
 
 ## What "completed" means in my game
 
