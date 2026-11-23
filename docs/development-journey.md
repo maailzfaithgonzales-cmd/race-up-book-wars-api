@@ -1,12 +1,12 @@
-# Development journey: [your game title] API
+# Development journey: Race Up: Book Wars API
 
-Student: [your name] · Section: [3-1 or 3-2] · Group: [group name]
+Student: Ma. Ailz Faith B. Gonzales · Section: 3-2 · Group: Team 9
 
 One entry per milestone, written the week you did it. Newest at the bottom.
 
 ## M1 · Accounts, passwords and tokens
-- Dates worked: [e.g. Nov 4 to Nov 7, 2026] · Time spent: [hours]
-- Goal: [one sentence]
+- Dates worked: Nov 20, 2026 · Time spent: 2
+- Goal: Players and hosts will be able to register, log in, and get a token that proves who they are.
 - What I built: [files and endpoints]
 - Evidence: [pull request link] · [two or three commit hashes]
 - Problem I hit: [the error or wrong behaviour]
