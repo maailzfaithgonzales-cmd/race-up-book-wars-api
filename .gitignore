@@ -11,3 +11,9 @@ Thumbs.db
 
 # logs
 *.log
+
+
+# test coverage and uploaded files
+coverage/
+uploads/*/*
+!uploads/*/.gitkeep
