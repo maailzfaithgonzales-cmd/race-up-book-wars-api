@@ -48,7 +48,25 @@ npm run dev
 | DB_PASSWORD | (your own) | Database password. Never commit this. |
 | HUB_API_KEY | dev-hub-key | Key the Library Game Hub sends to read results. The library gives the real one at deployment. |
 
+## Demo accounts
+
+All demo accounts are fictitious. `npm run db:reset` creates them and gives every one of them the same demo password.
+
+- Demo password: `RaceUp-demo-2026`
+- Log in with the School ID and the password (`POST /api/v1/auth/login`).
+
+| School ID | Nickname | Role | Note |
+|---|---|---|---|
+| 2099-0001 | host_maria | HOST | Hosted the demo game |
+| 2099-0002 | Mika | PLAYER | Won the demo game |
+| 2099-0003 | Tonio | PLAYER | Tied for 2nd |
+| 2099-0004 | Lani | PLAYER | Tied for 2nd |
+| 2099-0005 | Bert | PLAYER | Left the game early |
+| 2099-0006 | Coco | PLAYER | Never joined a game |
+| 2099-0007 | host_ben | HOST | Second host |
+
 ## Request headers and authentication
+
 
 ### X-Demo-User
 
