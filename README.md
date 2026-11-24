@@ -64,6 +64,7 @@ All demo accounts are fictitious. `npm run db:reset` creates them and gives ever
 | 2099-0005 | Bert | PLAYER | Left the game early |
 | 2099-0006 | Coco | PLAYER | Never joined a game |
 | 2099-0007 | host_ben | HOST | Second host |
+| 2099-0008 | admin_demo | ADMIN | Can list accounts and change roles |
 
 ## Request headers and authentication
 
