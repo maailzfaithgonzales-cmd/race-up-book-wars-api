@@ -69,15 +69,22 @@ All demo accounts are fictitious. `npm run db:reset` creates them and gives ever
 ## Request headers and authentication
 
 
-### X-Demo-User
+### Authorization (login token)
 
-The `X-Demo-User` header identifies the host or player making a request. During Week 11, this is a temporary identity mechanism that uses seeded school IDs to identify accounts.
+Every endpoint except `/health`, `/game-info`, `/results`, `/auth/register` and `/auth/login` needs a login token. Log in with `POST /api/v1/auth/login` to get one, then send it in this header:
 
-Example:
+`Authorization: Bearer <token>`
 
-`X-Demo-User: 2099-0001`
+Tokens last one hour (`JWT_EXPIRES_IN`). The old `X-Demo-User` header from Week 11 is no longer accepted.
 
-This is not real authentication because anyone can enter a seeded school ID. It is used for development and testing until the actual authentication system is implemented in Week 12.
+| Situation | Answer |
+|---|---|
+| No token | `401 AUTH_REQUIRED` |
+| Changed, damaged or expired token | `401 INVALID_TOKEN` |
+| Valid token, but the role may not do this | `403 FORBIDDEN` |
+| Wrong password, or a school ID that does not exist | the same `401 INVALID_CREDENTIALS` |
+
+Roles: `PLAYER` (every new account), `HOST` and `ADMIN`. Only an admin can change a role (`PATCH /api/v1/users/:id/role`).
 
 ### X-Hub-Key
 
