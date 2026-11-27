@@ -48,17 +48,43 @@ npm run dev
 | DB_PASSWORD | (your own) | Database password. Never commit this. |
 | HUB_API_KEY | dev-hub-key | Key the Library Game Hub sends to read results. The library gives the real one at deployment. |
 
+## Demo accounts
+
+All demo accounts are fictitious. `npm run db:reset` creates them and gives every one of them the same demo password.
+
+- Demo password: `RaceUp-demo-2026`
+- Log in with the School ID and the password (`POST /api/v1/auth/login`).
+
+| School ID | Nickname | Role | Note |
+|---|---|---|---|
+| 2099-0001 | host_maria | HOST | Hosted the demo game |
+| 2099-0002 | Mika | PLAYER | Won the demo game |
+| 2099-0003 | Tonio | PLAYER | Tied for 2nd |
+| 2099-0004 | Lani | PLAYER | Tied for 2nd |
+| 2099-0005 | Bert | PLAYER | Left the game early |
+| 2099-0006 | Coco | PLAYER | Never joined a game |
+| 2099-0007 | host_ben | HOST | Second host |
+| 2099-0008 | admin_demo | ADMIN | Can list accounts and change roles |
+
 ## Request headers and authentication
 
-### X-Demo-User
 
-The `X-Demo-User` header identifies the host or player making a request. During Week 11, this is a temporary identity mechanism that uses seeded school IDs to identify accounts.
+### Authorization (login token)
 
-Example:
+Every endpoint except `/health`, `/game-info`, `/results`, `/auth/register` and `/auth/login` needs a login token. Log in with `POST /api/v1/auth/login` to get one, then send it in this header:
 
-`X-Demo-User: 2099-0001`
+`Authorization: Bearer <token>`
 
-This is not real authentication because anyone can enter a seeded school ID. It is used for development and testing until the actual authentication system is implemented in Week 12.
+Tokens last one hour (`JWT_EXPIRES_IN`). The old `X-Demo-User` header from Week 11 is no longer accepted.
+
+| Situation | Answer |
+|---|---|
+| No token | `401 AUTH_REQUIRED` |
+| Changed, damaged or expired token | `401 INVALID_TOKEN` |
+| Valid token, but the role may not do this | `403 FORBIDDEN` |
+| Wrong password, or a school ID that does not exist | the same `401 INVALID_CREDENTIALS` |
+
+Roles: `PLAYER` (every new account), `HOST` and `ADMIN`. Only an admin can change a role (`PATCH /api/v1/users/:id/role`).
 
 ### X-Hub-Key
 
